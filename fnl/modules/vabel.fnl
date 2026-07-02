@@ -89,12 +89,12 @@
         [line1 _] (vim.fn.searchpos "\\c#+RESULTS" "c")
         [line2 _] (vim.fn.searchpos "\\c^$" "c")
         [next-src-line _] (vim.fn.searchpos "\\c#+begin_src" "c")
-        line2 (if (< line2 line1)
+        line2 (if (or (< line2 line1)
+                      (< next-src-line line2))
                   (vim.fn.line "$")
                   line2)]
     (when (and (> line1 0)
-               (> line1 from-line)
-               (> next-src-line line1))
+               (> line1 from-line))
       (vim.cmd (.. line1 "," line2 "d")))
     (vim.fn.winrestview pos)))
 
