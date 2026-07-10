@@ -81,12 +81,20 @@
               _ [])
     _ []))
 
+(fn double-switch? [s]
+  (and s (>= (length s) 2) (= (string.sub s 1 2) "--")))
+
 (fn completion [_ c]
   (vim.fn.sort
     (let [c-parts (mimis.split c " ")
-          with-defaults (fn [c] 
+          last-part (mimis.last c-parts)
+          enclosing-flag (when (not (double-switch? last-part))
+                           (let [prev (mimis.nth c-parts (- (length c-parts) 1))]
+                             (when (double-switch? prev) prev)))
+          switch (or enclosing-flag last-part)
+          with-defaults (fn [c]
                           [(unpack c)])]
-      (case (mimis.last c-parts)
+      (case switch
         "--log-group-name" (log-groups c) 
         "--queue-url" (for-service c :sqs sqs-queues)
         "--cluster" (for-service c :ecs ecs-clusters)
