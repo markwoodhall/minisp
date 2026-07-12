@@ -98,6 +98,7 @@
         "--log-group-name" (log-groups c) 
         "--queue-url" (for-service c :sqs sqs-queues)
         "--cluster" (for-service c :ecs ecs-clusters)
+        "--clusters" (for-service c :ecs ecs-clusters)
         "--service-name" (for-service c :ecs ecs-services)
         "--tasks" (for-service c :ecs ecs-tasks)
         "--db-instance-identifier" (with-defaults (db-instances c))
